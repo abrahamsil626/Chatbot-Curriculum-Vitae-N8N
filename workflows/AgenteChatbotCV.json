@@ -1,0 +1,255 @@
+{
+  "name": "AgenteChatbotCV",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hola! 👋\nMi nombre es Elly. Cómo puedo ayudarte hoy?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b651fede-e376-4c4d-bc5a-86ff6cf15e68",
+      "name": "When chat message received",
+      "webhookId": "82850384-8411-4efd-83e1-3f702795634f"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Eres un asistente de IA especializado. Tu ÚNICA fuente de conocimiento es la herramienta RAG llamada \"n8n-cv\", la cual consulta un índice vectorial específico con información de Curriculum Vitae (CV) de varias personas. NO utilices tu conocimiento interno preentrenado para responder preguntas factuales o específicas sobre el contenido de los CVs.\n\nInstrucciones Clave:\n1.- Consulta Obligatoria: Para CUALQUIER pregunta del usuario que requiera información factual o datos específicos (como experiencia laboral, habilidades técnicas, educación, etc., de las personas en los CVs), DEBES OBLIGATORIAMENTE invocar y utilizar la herramienta \"n8n-cv\"\n\n2.- Presenta el Resultado Directamente: Una vez que la herramienta \"n8n-cv\" devuelva información, tu respuesta DEBE consistir en presentar esa información directamente al usuario. Basa tu respuesta ÚNICA Y EXCLUSIVAMENTE en los datos recuperados por la herramienta. No añadas comentarios, información externa ni uses tu conocimiento general. \n\n3.- Manejo de Información Faltante: Si la herramienta \"n8n-cv\" indica explícitamente que la información no se encuentra o no devuelve ningún dato relevante para la pregunta, DEBES informar al usuario clara y directamente que la información no está disponible en la base de conocimiento consultada. NO inventes, supongas o especules sobre la información.\n\n4.- Fidelidad al Resultado: Tu función es ser una interfaz fiel a los resultados de la herramienta \"n8n-cv\". Si la herramienta da una respuesta, tu trabajo es comunicarla.\n\nProceso Simple: Recibe pregunta -> Llama a \"n8n-cv\" -> Revisa el resultado de \"n8n-cv\". SI hay resultado relevante, preséntalo tal cual. SI NO hay resultado relevante, informa que no se encontró. No hagas nada más."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "9bb90376-3713-4192-b681-56f558e72bc1",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "description": "Utiliza esta herramienta para obtener información sobre Curriculum Vitae que te pregunten."
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1.1,
+      "position": [
+        368,
+        208
+      ],
+      "id": "3e89499b-b29f-4bb0-8363-72e1ea6de980",
+      "name": "Answer questions with a vector store"
+    },
+    {
+      "parameters": {
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "n8n-cv",
+          "mode": "list",
+          "cachedResultName": "n8n-cv"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1.3,
+      "position": [
+        160,
+        416
+      ],
+      "id": "e5d2b681-f75a-42a8-9e01-71a2c4b71ef8",
+      "name": "Qdrant Vector Store",
+      "credentials": {
+        "qdrantApi": {
+          "id": "AuZmPTQ4jsL0ftY2",
+          "name": "QdrantApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "nomic-embed-text:v1.5"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOllama",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        624
+      ],
+      "id": "9b1c24a7-3b23-484a-9a1e-6bd43be3c221",
+      "name": "Embeddings Ollama",
+      "credentials": {
+        "ollamaApi": {
+          "id": "SjYyMkSu0gBHHThp",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        208
+      ],
+      "id": "a8365f23-734b-42c7-a451-b7fc5b45ba82",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "5d1642d9-8fb3-4517-9237-362aa2e874ad",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "a9edyXVYdgdqidNz",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        608,
+        400
+      ],
+      "id": "f10d8b84-bf79-4fa1-88f4-fc5008771b58",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "a9edyXVYdgdqidNz",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        160,
+        608
+      ],
+      "id": "3d3a6551-0411-4e20-9d6d-be3a7346cc42",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "a9edyXVYdgdqidNz",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Answer questions with a vector store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Answer questions with a vector store",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Ollama": {
+      "ai_embedding": [
+        []
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Answer questions with a vector store",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1133cee4-358a-4fb5-a36f-2fe5eacdbaf2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8294d99add5ff6591a275d49451b1c19ed6a3519ebfaacf66f7e51bb80af9062"
+  },
+  "id": "zzCdlT851X6ufVBS",
+  "tags": []
+}
