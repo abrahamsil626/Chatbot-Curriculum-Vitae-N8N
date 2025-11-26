@@ -132,25 +132,6 @@
       "name": "Recursive Character Text Splitter"
     },
     {
-      "parameters": {
-        "model": "nomic-embed-text:v1.5"
-      },
-      "type": "@n8n/n8n-nodes-langchain.embeddingsOllama",
-      "typeVersion": 1,
-      "position": [
-        496,
-        336
-      ],
-      "id": "930b5d84-bb1f-4ecf-b8b4-d4eda9e76336",
-      "name": "Embeddings Ollama",
-      "credentials": {
-        "ollamaApi": {
-          "id": "SjYyMkSu0gBHHThp",
-          "name": "Ollama account"
-        }
-      }
-    },
-    {
       "parameters": {},
       "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
       "typeVersion": 1,
@@ -225,11 +206,6 @@
         ]
       ]
     },
-    "Embeddings Ollama": {
-      "ai_embedding": [
-        []
-      ]
-    },
     "Embeddings Google Gemini": {
       "ai_embedding": [
         [
@@ -246,7 +222,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "f26a4ba5-05e2-4b20-b7f0-cf1fdeadd00f",
+  "versionId": "d6f255cf-f424-48d1-a7c0-36d5411403a0",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "8294d99add5ff6591a275d49451b1c19ed6a3519ebfaacf66f7e51bb80af9062"
